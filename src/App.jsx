@@ -20,7 +20,7 @@ import Header from "./common/Header";
 import ContractDapp from "./pages/contract-dapp/ContractDapp";
 import Playground from "./pages/dapp-playground/Playground";
 import DappComponents from "./pages/dapp-components/DappComponents";
-import { Route, Routes, BrowserRouter } from "react-router-dom";
+import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
 
 function App() {
   // const Home = lazy(() => import("./pages/home/Home"));
@@ -54,7 +54,7 @@ function App() {
   }, [userkey, network, isConnected]);
   return (
     <div className="bg-gray-100">
-      <BrowserRouter>
+      <Router>
         <Header
           setNetwork={setNetwork}
           setUserKey={setUserKey}
@@ -83,7 +83,7 @@ function App() {
         <Routes>
           <Route path="/components" element={<DappComponents />} />
         </Routes>
-      </BrowserRouter>
+      </Router>
     </div>
   );
 }
