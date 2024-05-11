@@ -3,7 +3,7 @@ import { Copy, DocumentDownload, Code, Setting2 } from "iconsax-react";
 
 export default function Playground() {
   return (
-    <section className="py-12  sm:py-16 lg:py-20">
+    <section className="py-12  sm:py-16 lg:py-20 h-screen">
       <div className="px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
         <div className="md:flex md:items-end md:justify-between">
           <div className="sm:max-w-md">
