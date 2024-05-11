@@ -98,9 +98,9 @@ export default function Playground() {
                       stroke="currentColor"
                     >
                       <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
                         d="M5 15l7-7 7 7"
                       />
                     </svg>
@@ -119,7 +119,7 @@ export default function Playground() {
                       </div>
                       <div className="ml-3 text-sm">
                         <label
-                          for=""
+                          htmlFor=""
                           className="text-sm font-medium text-gray-700"
                         >
                           {" "}
@@ -139,7 +139,7 @@ export default function Playground() {
                       </div>
                       <div className="ml-3 text-sm">
                         <label
-                          for=""
+                          htmlFor=""
                           className="text-sm font-medium text-gray-700"
                         >
                           {" "}
@@ -159,7 +159,7 @@ export default function Playground() {
                       </div>
                       <div className="ml-3 text-sm">
                         <label
-                          for=""
+                          // for=""
                           className="text-sm font-medium text-gray-700"
                         >
                           {" "}
@@ -179,7 +179,7 @@ export default function Playground() {
                       </div>
                       <div className="ml-3 text-sm">
                         <label
-                          for=""
+                          // for=""
                           className="text-sm font-medium text-gray-700"
                         >
                           {" "}
@@ -199,7 +199,7 @@ export default function Playground() {
                       </div>
                       <div className="ml-3 text-sm">
                         <label
-                          for=""
+                          // for=""
                           className="text-sm font-medium text-gray-700"
                         >
                           {" "}
@@ -224,9 +224,9 @@ export default function Playground() {
                       stroke="currentColor"
                     >
                       <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
                         d="M19 9l-7 7-7-7"
                       />
                     </svg>
@@ -247,9 +247,9 @@ export default function Playground() {
                       stroke="currentColor"
                     >
                       <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
                         d="M19 9l-7 7-7-7"
                       />
                     </svg>
@@ -270,9 +270,9 @@ export default function Playground() {
                       stroke="currentColor"
                     >
                       <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
                         d="M19 9l-7 7-7-7"
                       />
                     </svg>
@@ -293,9 +293,9 @@ export default function Playground() {
                       stroke="currentColor"
                     >
                       <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
                         d="M19 9l-7 7-7-7"
                       />
                     </svg>
