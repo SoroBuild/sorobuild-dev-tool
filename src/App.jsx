@@ -64,8 +64,6 @@ function App() {
         />
         <Routes>
           <Route exact path="/" element={<Home />} index />
-        </Routes>
-        <Routes>
           <Route
             path="/contracts"
             element={
@@ -77,11 +75,7 @@ function App() {
               />
             }
           />
-        </Routes>
-        <Routes>
           <Route path="/playground" element={<Playground />} />
-        </Routes>
-        <Routes>
           <Route path="/components" element={<DappComponents />} />
         </Routes>
       </Router>
