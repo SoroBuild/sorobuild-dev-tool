@@ -236,6 +236,7 @@ export default function Header({
             <div className="px-1 py-8">
               <div className="grid gap-y-7">
                 <Link
+                  onClick={toggleExpanded}
                   to="/contracts"
                   title=""
                   className="flex items-center p-3 -m-3 text-base font-medium text-gray-900 transition-all duration-200 rounded-xl hover:bg-gray-50 font-pj "
@@ -245,6 +246,7 @@ export default function Header({
                 </Link>
 
                 <Link
+                  onClick={toggleExpanded}
                   to="/playground"
                   title=""
                   className="flex items-center p-3 -m-3 text-base font-medium text-gray-900 transition-all duration-200 rounded-xl hover:bg-gray-50  font-pj "
@@ -253,6 +255,7 @@ export default function Header({
                 </Link>
 
                 <Link
+                  onClick={toggleExpanded}
                   to="/components"
                   title=""
                   className="flex items-center p-3 -m-3 text-base font-medium text-gray-900 transition-all duration-200 rounded-xl hover:bg-gray-50 font-pj "
@@ -262,6 +265,7 @@ export default function Header({
                 </Link>
 
                 <a
+                  onClick={toggleExpanded}
                   href="https://docs.sorobuild.io/"
                   title=""
                   className="text-base font-medium  transition-all duration-200 rounded font-pj hover:text-opacity-50 "
@@ -273,6 +277,7 @@ export default function Header({
 
                 {!isWalletInstalled ? (
                   <a
+                    onClick={toggleExpanded}
                     href="https://www.freighter.app/"
                     className="
                 text-center
