@@ -63,7 +63,7 @@ function App() {
           isWalletInstalled={isWalletInstalled}
         />
         <Routes>
-          <Route exact path="/" element={<Home />} index />
+          <Route path="/" element={<Home />} index />
           <Route
             path="/contracts"
             element={
