@@ -1,4 +1,4 @@
-# React + Vite
+#  SoroBuild: No-code Soroban depolyment and management tools for devs and projects
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
