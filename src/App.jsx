@@ -22,6 +22,7 @@ import Playground from "./pages/dapp-playground/Playground";
 import DappComponents from "./pages/dapp-components/DappComponents";
 
 import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
+import NotFound from "./not-found/NotFound";
 
 function App() {
   // const Home = lazy(() => import("./pages/home/Home"));
@@ -76,7 +77,9 @@ function App() {
             }
           />
           <Route path="/playground" element={<Playground />} />
+
           <Route path="/components" element={<DappComponents />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
     </div>
