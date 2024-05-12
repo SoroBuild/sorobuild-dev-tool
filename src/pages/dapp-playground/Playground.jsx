@@ -3,7 +3,7 @@ import { Copy, DocumentDownload, Code, Setting2 } from "iconsax-react";
 
 export default function Playground() {
   return (
-    <section className="py-4  sm:py-4 lg:py-8 h-screen">
+    <section className="py-4  sm:py-4 lg:py-6 h-screen">
       <div className="px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
         <div className="md:flex md:items-end md:justify-between">
           <div className="sm:max-w-md">
@@ -70,40 +70,77 @@ export default function Playground() {
             </button>
           </div>
         </div>
-        <div className="grid grid-cols-1 mt-6 md:mt-10 lg:grid-cols-4 gap-x-8 gap-y-10">
+        <div className="grid grid-cols-1 mt-6 md:mt-10 lg:grid-cols-4 gap-x-4 gap-y-10">
           <div className="hidden space-y-8 lg:block">
-            <button
-              type="button"
-              className="inline-flex items-center p-1 -m-1 gap-2 text-base font-bold text-gray-900 transition-all duration-200 focus:outline-none group"
-            >
-              <Setting2 size="20" color="#697689" />
-              Settings
-            </button>
-
-            <hr className="mt-5 border-gray-200" />
-
             <div className="flow-root mt-5">
               <div className="-my-6 divide-y divide-gray-200">
                 <div className="py-6 space-y-7">
                   <button
                     type="button"
+                    className="inline-flex items-center p-1 -m-1 gap-2 text-base font-bold text-gray-900 transition-all duration-200 focus:outline-none group"
+                  >
+                    <Setting2 size="20" color="#697689" />
+                    Settings
+                  </button>
+
+                  <hr className="mt-5 border-gray-200" />
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-4">
+                    <div>
+                      <label className="text-base font-medium text-gray-900">
+                        {" "}
+                        Name
+                      </label>
+                      <div className="mt-2.5 relative">
+                        <input
+                          type="tel"
+                          name=""
+                          id=""
+                          placeholder="Token name"
+                          className="block w-full px-4 py-4 text-black placeholder-gray-500 transition-all duration-200 bg-white border border-gray-200 rounded-md focus:outline-none focus:border-blue-600 caret-blue-600"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="text-base font-medium text-gray-900">
+                        {" "}
+                        Symbol
+                      </label>
+                      <div className="mt-2.5 relative mb-3">
+                        <input
+                          type="text"
+                          name=""
+                          id=""
+                          placeholder="symbol"
+                          className="block w-full px-4 py-4 text-black placeholder-gray-500 transition-all duration-200 bg-white border border-gray-200 rounded-md focus:outline-none focus:border-blue-600 caret-blue-600"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 gap-x-5 gap-y-4">
+                    <div>
+                      <label className="text-base font-medium text-gray-900">
+                        {" "}
+                        Premint
+                      </label>
+                      <div className="mt-2.5 relative mb-3">
+                        <input
+                          type="text"
+                          name=""
+                          id=""
+                          placeholder="Mint amount"
+                          className="block w-full px-4 py-4 text-black placeholder-gray-500 transition-all duration-200 bg-white border border-gray-200 rounded-md focus:outline-none focus:border-blue-600 caret-blue-600"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="py-6 space-y-7">
+                  <button
+                    type="button"
                     className="flex items-center justify-between w-full p-1 -m-1 text-base font-bold text-gray-900 transition-all duration-200 group focus:outline-none"
                   >
-                    Category
-                    <svg
-                      className="w-5 h-5 text-gray-400 group-hover:text-gray-900"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M5 15l7-7 7 7"
-                      />
-                    </svg>
+                    Features
                   </button>
 
                   <div className="space-y-6">
@@ -123,7 +160,7 @@ export default function Playground() {
                           className="text-sm font-medium text-gray-700"
                         >
                           {" "}
-                          Admin Template{" "}
+                          Mintable
                         </label>
                       </div>
                     </div>
@@ -143,7 +180,7 @@ export default function Playground() {
                           className="text-sm font-medium text-gray-700"
                         >
                           {" "}
-                          SaaS UI Kit{" "}
+                          Burnable
                         </label>
                       </div>
                     </div>
@@ -163,7 +200,7 @@ export default function Playground() {
                           className="text-sm font-medium text-gray-700"
                         >
                           {" "}
-                          Landing UI Kit{" "}
+                          Pausable
                         </label>
                       </div>
                     </div>
@@ -183,7 +220,7 @@ export default function Playground() {
                           className="text-sm font-medium text-gray-700"
                         >
                           {" "}
-                          Blog UI Kit{" "}
+                          Ownable
                         </label>
                       </div>
                     </div>
@@ -203,14 +240,14 @@ export default function Playground() {
                           className="text-sm font-medium text-gray-700"
                         >
                           {" "}
-                          Ecommerce UI Kit{" "}
+                          Roles
                         </label>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <div className="py-6 space-y-7">
+                {/* <div className="py-6 space-y-7">
                   <button
                     type="button"
                     className="flex items-center justify-between w-full p-1 -m-1 text-base font-bold text-gray-900 transition-all duration-200 group focus:outline-none"
@@ -300,7 +337,7 @@ export default function Playground() {
                       />
                     </svg>
                   </button>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
