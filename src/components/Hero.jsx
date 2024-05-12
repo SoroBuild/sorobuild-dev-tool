@@ -13,11 +13,11 @@ export default function Hero() {
               Ship dApps faster on Soroban
             </p>
             <h1 className="mt-5 text-4xl font-bold leading-tight text-gray-900 sm:text-5xl sm:leading-tight lg:text-5xl lg:leading-tight font-pj">
-              No-code Soroban depolyment and management tools
+              No-code Soroban depolyment and management Enviroment
             </h1>
             <p className="max-w-md mx-auto mt-6 text-base leading-7 text-gray-600 font-inter">
-              SoroBuild helps developers on Stellar build, test and deploy dApp
-              faster. It also provide contract management features.
+              SoroBuild provides developers on Soroban the tools to build, test
+              and deploy dApp faster
             </p>
 
             <div className="relative inline-flex mt-10 group">
