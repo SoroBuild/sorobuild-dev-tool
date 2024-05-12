@@ -13,7 +13,7 @@ export default function Hero() {
               Ship dApps faster on Soroban
             </p>
             <h1 className="mt-5 text-4xl font-bold leading-tight text-gray-900 sm:text-5xl sm:leading-tight lg:text-5xl lg:leading-tight font-pj">
-              No-code Soroban depolyment and management Enviroment
+              No-code Soroban deployment and management Enviroment
             </h1>
             <p className="max-w-md mx-auto mt-6 text-base leading-7 text-gray-600 font-inter">
               SoroBuild provides developers on Soroban with the tools to build,
