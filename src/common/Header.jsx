@@ -108,12 +108,12 @@ export default function Header({
             </Link>
 
             <Link
-              to="components"
+              to="/sorobuild-ui"
               title=""
               className="text-base font-medium  transition-all duration-200 rounded font-pj hover:text-opacity-50 "
             >
               {" "}
-              dApp Components
+              SoroBuild UI
             </Link>
           </div>
 
@@ -256,12 +256,12 @@ export default function Header({
 
                 <Link
                   onClick={toggleExpanded}
-                  to="/components"
+                  to="/sorobuild-ui"
                   title=""
                   className="flex items-center p-3 -m-3 text-base font-medium text-gray-900 transition-all duration-200 rounded-xl hover:bg-gray-50 font-pj "
                 >
                   {" "}
-                  dApp Components
+                  SoroBuild UI
                 </Link>
 
                 <a

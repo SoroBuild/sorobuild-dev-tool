@@ -78,7 +78,7 @@ function App() {
           />
           <Route path="/playground" element={<Playground />} />
 
-          <Route path="/components" element={<DappComponents />} />
+          <Route path="/sorobuild-ui" element={<DappComponents />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
