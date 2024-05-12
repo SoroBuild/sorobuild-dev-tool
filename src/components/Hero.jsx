@@ -16,8 +16,8 @@ export default function Hero() {
               No-code Soroban depolyment and management Enviroment
             </h1>
             <p className="max-w-md mx-auto mt-6 text-base leading-7 text-gray-600 font-inter">
-              SoroBuild provides developers on Soroban the tools to build, test
-              and deploy dApp faster
+              SoroBuild provides developers on Soroban with the tools to build,
+              test, and deploy dApps faster
             </p>
 
             <div className="relative inline-flex mt-10 group">
