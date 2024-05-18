@@ -26,11 +26,18 @@ import {
   Memo,
   nativeToScVal,
   ScInt,
+  Keypair,
+  StrKey,
 } from "@stellar/stellar-sdk";
 
 // export const RPC_URLS = {
 //   FUTURENET: "https://rpc-futurenet.stellar.org/",
 // };
+
+const secret = "SCLQTNYINVRXY32WDORXTD2JMM6YPBIASP7DKHXVEZX47DWEYZPRY2HO";
+const contract_file = "contract path here";
+
+const kp = Keypair.fromSecret(secret);
 
 export const BASE_FEE = "100";
 // export const FUTURENET_DETAILS = {
@@ -97,6 +104,32 @@ export const simulateTx = async (tx, server) => {
 
   throw new Error("cannot simulate transaction");
 };
+
+// set source
+
+// const sourceCreate=server.getAccount()
+
+// export const getTokenInfo = async (tokenId, arg, txBuilder, server) => {
+//   const tx = txBuilder
+//     .addOperation(contract.call(arg))
+//     .setTimeout(TimeoutInfinite)
+//     .build();
+
+//   const result = await simulateTx(tx, server);
+//   return result;
+// };
+
+// export const getTxBuilder = async (pubKey, fee, server, networkPassphrase) => {
+//   const source = await server.getAccount(pubKey);
+//   return new TransactionBuilder(source, {
+//     fee,
+//     networkPassphrase,
+//   });
+// };
+
+export async function createContract(txBuilder, contractWasm) {
+  const tx = txBuilder.append(contractWasm).setTimeout(TimeoutInfinite).build();
+}
 
 export const getTokenInfo = async (tokenId, arg, txBuilder, server) => {
   const contract = new Contract(tokenId);

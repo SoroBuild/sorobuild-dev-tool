@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { Copy, DocumentDownload, Code, Setting2 } from "iconsax-react";
+import { rustCode } from "./codes/code-snippets";
+import CodeBlock from "./CodeBlock";
 
 export default function Playground() {
   return (
-    <section className="py-4  sm:py-4 lg:py-6 h-screen">
+    <section className="py-2  sm:py-2 lg:py-4 h-screen ">
       <div className="px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
         <div className="md:flex md:items-end md:justify-between">
           <div className="sm:max-w-md">
@@ -135,7 +137,7 @@ export default function Playground() {
                     </div>
                   </div>
                 </div>
-                <div className="py-6 space-y-7">
+                <div className="py-6 space-y-5">
                   <button
                     type="button"
                     className="flex items-center justify-between w-full p-1 -m-1 text-base font-bold text-gray-900 transition-all duration-200 group focus:outline-none"
@@ -143,7 +145,7 @@ export default function Playground() {
                     Features
                   </button>
 
-                  <div className="space-y-6">
+                  <div className="space-y-4">
                     <div className="flex items-start">
                       <div className="flex items-center h-5">
                         <input
@@ -246,104 +248,14 @@ export default function Playground() {
                     </div>
                   </div>
                 </div>
-
-                {/* <div className="py-6 space-y-7">
-                  <button
-                    type="button"
-                    className="flex items-center justify-between w-full p-1 -m-1 text-base font-bold text-gray-900 transition-all duration-200 group focus:outline-none"
-                  >
-                    Compatible With
-                    <svg
-                      className="w-5 h-5 text-gray-400 group-hover:text-gray-900"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M19 9l-7 7-7-7"
-                      />
-                    </svg>
-                  </button>
-                </div>
-
-                <div className="py-6 space-y-7">
-                  <button
-                    type="button"
-                    className="flex items-center justify-between w-full p-1 -m-1 text-base font-bold text-gray-900 transition-all duration-200 group focus:outline-none"
-                  >
-                    Software Version
-                    <svg
-                      className="w-5 h-5 text-gray-400 group-hover:text-gray-900"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M19 9l-7 7-7-7"
-                      />
-                    </svg>
-                  </button>
-                </div>
-
-                <div className="py-6 space-y-7">
-                  <button
-                    type="button"
-                    className="flex items-center justify-between w-full p-1 -m-1 text-base font-bold text-gray-900 transition-all duration-200 group focus:outline-none"
-                  >
-                    Price
-                    <svg
-                      className="w-5 h-5 text-gray-400 group-hover:text-gray-900"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M19 9l-7 7-7-7"
-                      />
-                    </svg>
-                  </button>
-                </div>
-
-                <div className="py-6 space-y-7">
-                  <button
-                    type="button"
-                    className="flex items-center justify-between w-full p-1 -m-1 text-base font-bold text-gray-900 transition-all duration-200 group focus:outline-none"
-                  >
-                    Date Added
-                    <svg
-                      className="w-5 h-5 text-gray-400 group-hover:text-gray-900"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M19 9l-7 7-7-7"
-                      />
-                    </svg>
-                  </button>
-                </div> */}
               </div>
             </div>
           </div>
 
-          <div className="lg:col-span-3">
-            <div className="bg-[#282B34] border-2  rounded-md h-96 lg:h-full"></div>
+          <div className="lg:col-span-3 ">
+            <div className="">
+              <CodeBlock code={rustCode} language="rust" />
+            </div>
           </div>
         </div>
       </div>

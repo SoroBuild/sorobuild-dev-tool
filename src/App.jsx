@@ -38,11 +38,6 @@ function App() {
   const [userkey, setUserKey] = useState("");
   const [network, setNetwork] = useState("");
   const [isWalletInstalled, setIsWalletInstalled] = useState(false);
-
-  // console.log("is connected state", isWalletInstalled);
-
-  // console.log("current user key", userkey);
-
   useEffect(() => {
     async function fetchConnectedUser() {
       const connected = await isConnected();

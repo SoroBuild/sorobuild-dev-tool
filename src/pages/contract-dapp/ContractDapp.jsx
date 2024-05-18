@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { Soroban } from "@stellar/stellar-sdk";
+import { Operation, Soroban, xdr } from "@stellar/stellar-sdk";
 import { signTransaction } from "@stellar/freighter-api";
+// import arrayBufferToBuffer from "arraybuffer-to-buffer";
 
 import {
   server,
@@ -12,9 +13,12 @@ import {
   xlmToStroop,
   submitTx,
   ConnectWallet,
+  createContract,
 } from "../../utils/soroban";
 
 import { BuyCrypto, SecuritySafe, People } from "iconsax-react";
+
+// const arrayBuffer = require("arraybuffer-to-buffer");
 
 export default function ContractDapp({
   userKey,
@@ -45,6 +49,59 @@ export default function ContractDapp({
     setConnecting(() => true);
     await ConnectWallet(setUserKey, setNetwork);
     setConnecting(() => false);
+  }
+
+  async function handleCreateContract(e) {
+    e.preventDefault();
+    const wasmFile =
+      "../../../target/wasm32-unknown-unknown/release/soroban_token_contract.wasm";
+
+    const response = await fetch(wasmFile);
+    const bytes = await response.arrayBuffer();
+
+    // const { instance } = await WebAssembly.instantiate(bytes);
+    // const wasm = await WebAssembly.compileStreaming(response);
+
+    // console.log("create contract triggered", buffer);
+
+    const txBuilder = await getTxBuilder(
+      userKey,
+      BASE_FEE,
+      server,
+      selectedNetwork.networkPassphrase
+    );
+    // const tx = txBuilder.addOperation(
+    //   Operation.uploadContractWasm({ userKey, bytes })
+    // );
+
+    const sha256Digest = await crypto.subtle.digest("SHA-256", bytes);
+    const wasmHash = Array.from(new Uint8Array(sha256Digest))
+      .map((byte) => byte.toString(16).padStart(2, "0"))
+      .join("");
+
+    // const hashhash =
+    //   "<Buffer f8 42 80 41 bc bb 68 14 ca da 8e 70 a3 94 0a 50 b5 b3 9d fe ba 68 dc f8 4b e1 ee 51 b0 cc f3 75>";
+
+    // const test =
+    //   "f8428041bcbb6814cada8e70a3940a50b5b39dfeba68dcf84be1ee51b0ccf375";
+
+    const hashtobuffer2 = new Uint8Array(
+      wasmHash.match(/.{1,2}/g).map((byte) => parseInt(byte, 16))
+    );
+
+    const tx = txBuilder.addOperation(
+      Operation.createCustomContract({ userKey, hashtobuffer2 })
+    );
+    // Operation.uploadContractWasm({ address: userKey });
+    // const tx = txBuilder.addOperation(
+    // Operation.createCustomContract({ userKey, bytes });
+    // );
+
+    // const tx = txBuilder.append(wasm).setTimeout(TimeoutInfinite).build();
+    // const result = await createContract(txBuilder, wasm);
+
+    // console.log("contract file", wasmFile);
+    console.log("create contract triggered", hashtobuffer);
   }
 
   async function handleSubmitToken(e) {
@@ -348,6 +405,15 @@ export default function ContractDapp({
                     </div>
                   )
                 )}
+              </div>
+              <div className="sm:col-span-2">
+                <button
+                  onClick={handleCreateContract}
+                  className="relative inline-flex items-center justify-center w-full px-8 py-4 text-lg font-bold text-white transition-all duration-200 bg-gray-900 font-pj rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
+                  role="button"
+                >
+                  create contract
+                </button>
               </div>
             </div>
           </div>
