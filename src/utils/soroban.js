@@ -28,11 +28,8 @@ import {
   ScInt,
   Keypair,
   StrKey,
+  Account,
 } from "@stellar/stellar-sdk";
-
-// export const RPC_URLS = {
-//   FUTURENET: "https://rpc-futurenet.stellar.org/",
-// };
 
 const secret = "SCLQTNYINVRXY32WDORXTD2JMM6YPBIASP7DKHXVEZX47DWEYZPRY2HO";
 const contract_file = "contract path here";
@@ -40,24 +37,24 @@ const contract_file = "contract path here";
 const kp = Keypair.fromSecret(secret);
 
 export const BASE_FEE = "100";
-// export const FUTURENET_DETAILS = {
-//   network: "FUTURENET",
-//   networkUrl: "https://horizon-futurenet.stellar.org",
-//   networkPassphrase: "Test SDF Future Network ; October 2022",
-// };
-
 export const FUTURENET_DETAILS = {
-  network: "TESTNET",
+  network: "FUTURENET",
   networkUrl: "https://horizon-futurenet.stellar.org",
-  networkPassphrase: "Test SDF Network ; September 2015",
+  networkPassphrase: "Test SDF Future Network ; October 2022",
 };
 
-// export const RPC_URLS = {
-//   FUTURENET: "https://rpc-futurenet.stellar.org/",
+// export const FUTURENET_DETAILS = {
+//   network: "TESTNET",
+//   networkUrl: "https://horizon-futurenet.stellar.org",
+//   networkPassphrase: "Test SDF Network ; September 2015",
 // };
+
 export const RPC_URLS = {
-  TESTNET: "https://soroban-testnet.stellar.org/",
+  FUTURENET: "https://rpc-futurenet.stellar.org/",
 };
+// export const RPC_URLS = {
+//   TESTNET: "https://soroban-testnet.stellar.org/",
+// };
 
 export const accountToScVal = (account) => new Address(account).toScVal();
 
@@ -141,6 +138,36 @@ export const getTokenInfo = async (tokenId, arg, txBuilder, server) => {
 
   const result = await simulateTx(tx, server);
   return result;
+};
+
+export const anyInvoke = async (
+  contractId,
+  args,
+  memo,
+  txBuilderAny,
+  server
+) => {
+  try {
+    const contract = new Contract(contractId);
+
+    const tx = txBuilderAny
+      .addOperation(contract.call(...args))
+      .setTimeout(TimeoutInfinite);
+
+    if (memo?.length > 0) {
+      tx.addMemo(Memo.text(memo));
+    }
+
+    const built = tx.build();
+    const sim = await server.simulateTransaction(built);
+
+    const preparedTransaction = await server.prepareTransaction(built);
+    console.log("built transaction", sim);
+
+    return preparedTransaction.toXDR();
+  } catch (e) {
+    console.log(e.message);
+  }
 };
 
 export const mintTokens = async ({
@@ -238,7 +265,18 @@ export const submitTx = async (signedXDR, networkPassphrase, server) => {
     }
 
     if (txResponse.status === SorobanRpc.Api.GetTransactionStatus.SUCCESS) {
-      return txResponse.resultXdr.toXDR("base64");
+      // return txResponse.resultXdr.toXDR("base64");
+      // return txResponse.resultMetaXdr._value._attributes.sorobanMeta._attributes
+      // return txResponse.resultMetaXdr._value._attributes.sorobanMeta._attributes
+      // const contractByte = txResponse;
+      // const contractAddress = StrKey.encodeContract(contractByte);
+      const restx = await server.getTransaction(sendResponse.hash);
+
+      // const resttt = xdr.TransactionMeta.fromXDR(restx.returnValue._value);
+      // const result = StrKey.encodeContract(restx.returnValue._value);
+
+      // return StrKey.encodeContract(restx.returnValue._value);
+      return restx;
     }
   }
   throw new Error(

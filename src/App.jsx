@@ -1,19 +1,6 @@
 import { useState, lazy, Suspense, useEffect } from "react";
 
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import {
-  isConnected,
-  getPublicKey,
-  signAuthEntry,
-  signTransaction,
-  signBlob,
-  isAllowed,
-  setAllowed,
-  requestAccess,
-  getUserInfo,
-  getNetwork,
-} from "@stellar/freighter-api";
+import { isConnected, getPublicKey, getNetwork } from "@stellar/freighter-api";
 
 import Home from "./pages/home/Home";
 import Header from "./common/Header";
@@ -25,19 +12,11 @@ import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
 import NotFound from "./not-found/NotFound";
 
 function App() {
-  // const Home = lazy(() => import("./pages/home/Home"));
-  // const ContractDapp = lazy(() => import("./pages/contract-dapp/ContractDapp"));
-  // const ComponentDapp = lazy(() =>
-  //   import("./pages/dapp-components/DappComponents")
-  // );
-
-  // const DappPlayground = lazy(() =>
-  //   import("./pages/dapp-playground/Playground")
-  // );
-
   const [userkey, setUserKey] = useState("");
   const [network, setNetwork] = useState("");
+
   const [isWalletInstalled, setIsWalletInstalled] = useState(false);
+  const [connecting, setConnecting] = useState(false);
   useEffect(() => {
     async function fetchConnectedUser() {
       const connected = await isConnected();
@@ -48,7 +27,7 @@ function App() {
       setIsWalletInstalled(() => connected);
     }
     fetchConnectedUser();
-  }, [userkey, network, isConnected]);
+  }, [userkey, network, isConnected, connecting]);
   return (
     <div className="bg-gray-100">
       <Router>
@@ -57,6 +36,8 @@ function App() {
           setUserKey={setUserKey}
           userKey={userkey}
           isWalletInstalled={isWalletInstalled}
+          setConnecting={setConnecting}
+          connecting={connecting}
         />
         <Routes>
           <Route path="/" element={<Home />} index />
@@ -68,6 +49,8 @@ function App() {
                 setNetwork={setNetwork}
                 setUserKey={setUserKey}
                 isWalletInstalled={isWalletInstalled}
+                setConnecting={setConnecting}
+                connecting={connecting}
               />
             }
           />

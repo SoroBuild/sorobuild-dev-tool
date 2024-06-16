@@ -10,10 +10,12 @@ export default function Header({
   setNetwork,
   userKey,
   isWalletInstalled,
+  connecting,
+  setConnecting,
 }) {
   const isLargeScreen = useMediaQuery({ minWidth: 1024 });
   const [expanded, setExpanded] = useState(false);
-  const [connecting, setConnecting] = useState(false);
+
   const toggleExpanded = () => {
     setExpanded((prevExpanded) => !prevExpanded);
   };
