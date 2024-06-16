@@ -1,12 +1,6 @@
 import React, { useState } from "react";
-import {
-  Operation,
-  TimeoutInfinite,
-  StrKey,
-  Address,
-} from "@stellar/stellar-sdk";
+import { StrKey, Address } from "@stellar/stellar-sdk";
 import { signTransaction } from "@stellar/freighter-api";
-// import arrayBufferToBuffer from "arraybuffer-to-buffer";
 
 import {
   server,
@@ -14,6 +8,8 @@ import {
   FUTURENET_DETAILS,
   BASE_FEE,
   submitTx,
+  loadContract,
+  createContract,
 } from "../../utils/soroban";
 
 import {
@@ -23,16 +19,15 @@ import {
   CodeCircle,
   DocumentCode,
   AddCircle,
+  CommandSquare,
+  Copy,
 } from "iconsax-react";
-import { Command } from "iconsax-react";
-import { CommandSquare } from "iconsax-react";
-import { Copy } from "iconsax-react";
+
 import XLMlogo from "../../assets/2024.svg";
+import { contracts } from "../../contract";
 
 export default function DeployContract({
   userKey,
-  setUserKey,
-  setNetwork,
   setLoadedContractId,
   setDeploySelected,
   connecting,
@@ -41,8 +36,10 @@ export default function DeployContract({
   const [file, setFile] = useState(null);
   const [fileContent, setFileContent] = useState(null);
   const [contractAddr, setContractAddr] = useState("");
+  const [templateIndex, setTemplateIndex] = useState(null);
 
   const handleFileChange = (event) => {
+    setTemplateIndex(() => null);
     const selectedFile = event.target.files[0];
     setFile(selectedFile);
 
@@ -61,26 +58,28 @@ export default function DeployContract({
       setDeploySelected(() => false);
     }
   }
-
+  // console.log("contract libraries", contracts);
   const selectedNetwork = FUTURENET_DETAILS;
   const { network, networkPassphrase } = selectedNetwork;
 
+  const copyHandler = () => {
+    navigator.clipboard
+      .writeText(contractAddr)
+      .then(() => {
+        // console.log("Contract ID copied to clipboard:", loadedContractId);
+        // Optionally, show a success message to the user
+        alert("Contract ID copied!");
+      })
+      .catch((err) => {
+        // console.error("Failed to copy text to clipboard:", err);
+      });
+  };
+
   async function handleCreateContract(e) {
     e.preventDefault();
-    // const wasmFile =
-    //   "../../../target/wasm32-unknown-unknown/release/soroban_token_contract.wasm";
-
-    // const response = await fetch(wasmFile);
-    // const bytes = await response.arrayBuffer();
-
-    // console.log("hardcoded file", bytes);
-    // console.log("selected file", fileContent);
-    // // console.log("wasm hash value", wasmHash);
 
     try {
       setConnecting(() => true);
-      const wasmFile = fileContent;
-
       const txBuilderUpload = await getTxBuilder(
         userKey,
         BASE_FEE,
@@ -88,34 +87,14 @@ export default function DeployContract({
         selectedNetwork.networkPassphrase
       );
 
-      // const sender = (await server.getAccount(kp.publicKey()))._accountId;
-      // const senderAddr1 = new Address(userKey);
+      const wasm = fileContent;
 
-      const uploadTx = txBuilderUpload
-        .setTimeout(TimeoutInfinite)
-        .addOperation(
-          Operation.uploadContractWasm({
-            wasm: wasmFile,
-          })
-        )
-        .build();
-
-      const preparedTransaction = await server.prepareTransaction(uploadTx);
-      // this works for imported account
-      // const signedTx = preparedTransaction.sign(kp);
-      // const sendTxOracle = await server.sendTransaction(preparedTransaction);
-
-      const xdr = preparedTransaction.toXDR();
-      const signedTx = await signTransaction(xdr, { network: "FUTURENET" });
-      const txHash = await submitTx(signedTx, networkPassphrase, server);
-
+      const signedXdr = await loadContract(wasm, txBuilderUpload);
+      const txHash = await submitTx(signedXdr, networkPassphrase, server);
       const loadedWasmHash = txHash.returnValue._value;
+      //   console.log("returned xdr", loadedWasmHash);
+
       const senderAddr = new Address(userKey);
-      // const consss = new Account(userKey, "31");
-
-      const myAccount = await server.getLatestLedger();
-
-      console.log("latest ledger print", myAccount);
 
       const txBuilderCreate = await getTxBuilder(
         userKey,
@@ -124,42 +103,38 @@ export default function DeployContract({
         selectedNetwork.networkPassphrase
       );
 
-      const createTx = txBuilderCreate
-        .setTimeout(TimeoutInfinite)
-        .addOperation(
-          Operation.createCustomContract({
-            address: senderAddr,
-            wasmHash: loadedWasmHash,
-          })
-        )
-        .build();
-
-      const preparedTransactionCreate = await server.prepareTransaction(
-        createTx
+      const signedXdr2 = await createContract(
+        senderAddr,
+        loadedWasmHash,
+        txBuilderCreate
       );
 
-      const xdrCreate = preparedTransactionCreate.toXDR();
-      const signedTx2 = await signTransaction(xdrCreate, {
-        network: "FUTURENET",
-      });
-      const txHash2 = await submitTx(signedTx2, networkPassphrase, server);
+      const txHash2 = await submitTx(signedXdr2, networkPassphrase, server);
       // const resttt = xdr.TransactionMeta.fromXDR(txHash2.resultMetaXdr);
 
       const contractId = StrKey.encodeContract(
         txHash2.returnValue._value._value
       );
-      const isContract = StrKey.isValidContract(contractId);
+
       setContractAddr(() => contractId);
-
-      // const contractDetails = new Contract(contractId).getFootprint();
-
-      console.log("final value", contractId, isContract);
     } catch (e) {
-      console.log(e.message);
+      alert(e.message);
     } finally {
       setConnecting(() => false);
     }
   }
+
+  async function templateSelectHandler(index) {
+    setTemplateIndex(() => index);
+    const response = await fetch(contracts[index].wasmfile);
+    const bytes = await response.arrayBuffer();
+    setFileContent(() => bytes);
+    setFile(() => null);
+  }
+
+  const handleCodeLinkRedirect = (index) => {
+    window.open(`${contracts[index].codeLink}`, "_blank");
+  };
 
   return (
     <div className="overflow-x-hidden bg-gray-100">
@@ -176,69 +151,44 @@ export default function DeployContract({
                 </h3>
               </div>
               <div className="grid grid-cols-1 gap-2 px-8  md:px-0 md:grid-cols-3">
-                <div className="relative ">
-                  <div className="relative p-4 overflow-hidden bg-white border border-gray-200 rounded-2xl">
-                    <div className="flex items-start sm:items-center mb-1">
-                      <BuyCrypto
-                        size="32"
-                        color="#000000"
-                        className="flex-shrink-0 w-10 h-10  text-gray-400"
-                      />
+                {contracts.map((contract, index) => (
+                  <button
+                    className={`relative border border-gray-200 rounded-2xl  ${
+                      templateIndex === index ? "bg-gray-400" : "bg-white"
+                    }`}
+                    key={index}
+                    onClick={() => templateSelectHandler(index)}
+                  >
+                    <div className="relative p-4 overflow-hidden  ">
+                      <div className="flex items-start sm:items-center mb-1">
+                        <img
+                          src={XLMlogo}
+                          className="flex-shrink-0 w-12 h-12 text-gray-400"
+                        />
 
-                      <p className="ml-6 text-xl font-bold text-gray-900 text-[24px] font-pj">
-                        Token Contract
+                        <p className="ml-6 text-xl font-bold text-gray-900 text-[24px] font-pj">
+                          {contract.title}
+                        </p>
+                      </div>
+                      <p className="ml-4 text-xl font-small text-[14px] text-gray-700  font-pj">
+                        {contract.description}
                       </p>
+                      <a
+                        className="p-1 bg-gray-100 absolute -right-1 -bottom-1 rounded-full z-500 "
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleCodeLinkRedirect(index);
+                        }}
+                      >
+                        <CodeCircle
+                          size="32"
+                          color="#555555"
+                          className="z-10"
+                        />
+                      </a>
                     </div>
-                    <p className="ml-4 text-xl font-small text-[14px] text-gray-700  font-pj">
-                      Standard soroban token smart contract
-                    </p>
-                    <div className="p-1 bg-slate-200 absolute right-0 bottom-0 rounded-full z-10s">
-                      <CodeCircle size="32" color="#555555" className="" />
-                    </div>
-                  </div>
-                </div>
-                <div className="relative ">
-                  <div className="relative p-4 overflow-hidden bg-white border border-gray-200 rounded-2xl">
-                    <div className="flex items-start sm:items-center mb-1">
-                      <SecuritySafe
-                        size="32"
-                        color="#000000"
-                        className="flex-shrink-0 w-10 h-10  text-gray-400"
-                      />
-
-                      <p className="ml-6 text-xl font-bold text-gray-900 text-[24px] font-pj">
-                        Staking Contract
-                      </p>
-                    </div>
-                    <p className="ml-4 text-xl font-small text-[14px] text-gray-700  font-pj">
-                      Simple soroban staking smart contract
-                    </p>
-                    <div className="p-1 bg-slate-200 absolute right-0 bottom-0 rounded-full z-10s">
-                      <CodeCircle size="32" color="#555555" className="" />
-                    </div>
-                  </div>
-                </div>
-                <div className="relative ">
-                  <div className="relative p-4 overflow-hidden bg-white border border-gray-200 rounded-2xl">
-                    <div className="flex items-start sm:items-center mb-1">
-                      <People
-                        size="32"
-                        color="#000000"
-                        className="flex-shrink-0 w-10 h-10  text-gray-400"
-                      />
-
-                      <p className="ml-6 text-xl font-bold text-gray-900 text-[24px] font-pj">
-                        DAO Contract
-                      </p>
-                    </div>
-                    <p className="ml-4 text-xl font-small text-[14px] text-gray-700  font-pj">
-                      Simple soroban governance contract
-                    </p>
-                    <div className="p-1 bg-slate-200 absolute right-0 bottom-0 rounded-full z-10s">
-                      <CodeCircle size="32" color="#555555" className="" />
-                    </div>
-                  </div>
-                </div>
+                  </button>
+                ))}
               </div>
             </div>
             <div className=" p-0 pl-4">
@@ -302,11 +252,13 @@ export default function DeployContract({
                       <p className="ml-16 text-xl font-small text-[14px] text-gray-700 font-pj">
                         Contract Id: {contractAddr}{" "}
                       </p>
-                      <Copy
-                        size="16"
-                        color="#000000"
-                        className="flex-shrink-0 w-auto h-6 text-gray-400"
-                      />
+                      <button onClick={copyHandler}>
+                        <Copy
+                          size="16"
+                          color="#000000"
+                          className="flex-shrink-0 w-auto h-6 text-gray-400"
+                        />
+                      </button>
                     </div>
                   </div>
 

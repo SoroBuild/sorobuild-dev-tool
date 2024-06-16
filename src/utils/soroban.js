@@ -124,10 +124,6 @@ export const simulateTx = async (tx, server) => {
 //   });
 // };
 
-export async function createContract(txBuilder, contractWasm) {
-  const tx = txBuilder.append(contractWasm).setTimeout(TimeoutInfinite).build();
-}
-
 export const getTokenInfo = async (tokenId, arg, txBuilder, server) => {
   const contract = new Contract(tokenId);
   const contract3 = new Contract(tokenId);
@@ -162,13 +158,154 @@ export const anyInvoke = async (
     const sim = await server.simulateTransaction(built);
 
     const preparedTransaction = await server.prepareTransaction(built);
-    console.log("built transaction", sim);
+    // console.log("built transaction", sim);
 
     return preparedTransaction.toXDR();
   } catch (e) {
-    console.log(e.message);
+    alert(e.message);
   }
 };
+
+export async function loadContract(wasm, txBuilderUpload) {
+  try {
+    const wasmFile = wasm;
+
+    const uploadTx = txBuilderUpload
+      .setTimeout(TimeoutInfinite)
+      .addOperation(
+        Operation.uploadContractWasm({
+          wasm: wasmFile,
+        })
+      )
+      .build();
+
+    const preparedTransaction = await server.prepareTransaction(uploadTx);
+
+    const xdr = preparedTransaction.toXDR();
+    return await signTransaction(xdr, { network: "FUTURENET" });
+  } catch (e) {
+    alert(e.message);
+  }
+}
+
+export async function createContract(
+  senderAddr,
+  loadedWasmHash,
+  txBuilderCreate
+) {
+  const createTx = txBuilderCreate
+    .setTimeout(TimeoutInfinite)
+    .addOperation(
+      Operation.createCustomContract({
+        address: senderAddr,
+        wasmHash: loadedWasmHash,
+      })
+    )
+    .build();
+  const preparedTransactionCreate = await server.prepareTransaction(createTx);
+
+  const xdrCreate = preparedTransactionCreate.toXDR();
+  const signedTx2 = await signTransaction(xdrCreate, {
+    network: "FUTURENET",
+  });
+  return signedTx2;
+}
+
+//   async function handleCreateContract(e) {
+//     e.preventDefault();
+//     // const wasmFile =
+//     //   "../../../target/wasm32-unknown-unknown/release/soroban_token_contract.wasm";
+
+//     // const response = await fetch(wasmFile);
+//     // const bytes = await response.arrayBuffer();
+
+//     // console.log("hardcoded file", bytes);
+//     // console.log("selected file", fileContent);
+//     // // console.log("wasm hash value", wasmHash);
+
+//     try {
+//       setConnecting(() => true);
+//       const wasmFile = fileContent;
+
+//       const txBuilderUpload = await getTxBuilder(
+//         userKey,
+//         BASE_FEE,
+//         server,
+//         selectedNetwork.networkPassphrase
+//       );
+
+//       // const sender = (await server.getAccount(kp.publicKey()))._accountId;
+//       // const senderAddr1 = new Address(userKey);
+
+//       const uploadTx = txBuilderUpload
+//         .setTimeout(TimeoutInfinite)
+//         .addOperation(
+//           Operation.uploadContractWasm({
+//             wasm: wasmFile,
+//           })
+//         )
+//         .build();
+
+//       const preparedTransaction = await server.prepareTransaction(uploadTx);
+//       // this works for imported account
+//       // const signedTx = preparedTransaction.sign(kp);
+//       // const sendTxOracle = await server.sendTransaction(preparedTransaction);
+
+//       const xdr = preparedTransaction.toXDR();
+//       const signedTx = await signTransaction(xdr, { network: "FUTURENET" });
+//       const txHash = await submitTx(signedTx, networkPassphrase, server);
+
+//       const loadedWasmHash = txHash.returnValue._value;
+//       const senderAddr = new Address(userKey);
+//       // const consss = new Account(userKey, "31");
+
+//       const myAccount = await server.getLatestLedger();
+
+//       console.log("latest ledger print", myAccount);
+
+//       const txBuilderCreate = await getTxBuilder(
+//         userKey,
+//         BASE_FEE,
+//         server,
+//         selectedNetwork.networkPassphrase
+//       );
+
+//       const createTx = txBuilderCreate
+//         .setTimeout(TimeoutInfinite)
+//         .addOperation(
+//           Operation.createCustomContract({
+//             address: senderAddr,
+//             wasmHash: loadedWasmHash,
+//           })
+//         )
+//         .build();
+
+//       const preparedTransactionCreate = await server.prepareTransaction(
+//         createTx
+//       );
+
+//       const xdrCreate = preparedTransactionCreate.toXDR();
+//       const signedTx2 = await signTransaction(xdrCreate, {
+//         network: "FUTURENET",
+//       });
+//       const txHash2 = await submitTx(signedTx2, networkPassphrase, server);
+//       // const resttt = xdr.TransactionMeta.fromXDR(txHash2.resultMetaXdr);
+
+//       const contractId = StrKey.encodeContract(
+//         txHash2.returnValue._value._value
+//       );
+//       const isContract = StrKey.isValidContract(contractId);
+//       setContractAddr(() => contractId);
+
+//       // const contractDetails = new Contract(contractId).getFootprint();
+
+//       console.log("final value", contractId, isContract);
+//     } catch (e) {
+//       alert(e.message);
+//     } finally {
+//       setConnecting(() => false);
+//     }
+//   }
 
 export const mintTokens = async ({
   tokenId,
@@ -200,7 +337,7 @@ export const mintTokens = async ({
   const sim = await server.simulateTransaction(built);
 
   const preparedTransaction = await server.prepareTransaction(built);
-  console.log("built transaction", sim);
+  // console.log("built transaction", sim);
 
   return preparedTransaction.toXDR();
 };
@@ -235,7 +372,7 @@ export const getEstimatedFee = async (
 
   const simResponse = await server.simulateTransaction(raw);
 
-  console.log("sim response", simResponse);
+  // console.log("sim response", simResponse);
 
   if (SorobanRpc.Api.isSimulationError(simResponse)) {
     throw simResponse.error;
@@ -247,7 +384,7 @@ export const submitTx = async (signedXDR, networkPassphrase, server) => {
 
   const sendResponse = await server.sendTransaction(tx);
 
-  console.log("transaction result", sendResponse);
+  // console.log("transaction result", sendResponse);
 
   if (sendResponse.status === "PENDING") {
     let txResponse = await server.getTransaction(sendResponse.hash);

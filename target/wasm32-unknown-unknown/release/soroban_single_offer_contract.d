@@ -1,0 +1,1 @@
+/Users/sholadev/Desktop/Soroban/soroban-examples-main/single_offer/target/wasm32-unknown-unknown/release/soroban_single_offer_contract.wasm: /Users/sholadev/Desktop/Soroban/soroban-examples-main/single_offer/src/lib.rs /Users/sholadev/Desktop/Soroban/soroban-examples-main/single_offer/src/test.rs

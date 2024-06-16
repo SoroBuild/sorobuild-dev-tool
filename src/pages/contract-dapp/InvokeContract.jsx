@@ -102,7 +102,7 @@ export default function InvokeContract({
       const result = await submitTx(signedXdr, networkPassphrase, server);
       console.log("invoke result", result);
     } catch (e) {
-      console.log(e.message);
+      alert(e.message);
     } finally {
       setConnecting(() => false);
     }
@@ -113,6 +113,20 @@ export default function InvokeContract({
       setLoadedContractId(() => selectedToken);
     }
   }
+
+  const copyHandler = () => {
+    navigator.clipboard
+      .writeText(loadedContractId)
+      .then(() => {
+        // console.log("Contract ID copied to clipboard:", loadedContractId);
+        // Optionally, show a success message to the user
+        alert("Contract ID copied!");
+      })
+      .catch((err) => {
+        // console.error("Failed to copy text to clipboard:", err);
+      });
+  };
+
   async function mintSubmitHandler(e) {
     setMintStatus(() => "SIGN");
     e.preventDefault();
@@ -194,11 +208,13 @@ export default function InvokeContract({
                             <p className="ml-16 text-xl font-small text-[18px] text-gray-700 font-pj">
                               {loadedContractId}{" "}
                             </p>
-                            <Copy
-                              size="16"
-                              color="#000000"
-                              className="flex-shrink-0 w-auto h-6 text-gray-400"
-                            />
+                            <button onClick={copyHandler}>
+                              <Copy
+                                size="16"
+                                color="#000000"
+                                className="flex-shrink-0 w-auto h-6 text-gray-400"
+                              />
+                            </button>
                           </div>
                         </div>
                       </div>
